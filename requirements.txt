@@ -1,3 +1,4 @@
 pillow==8.3.0
 tk==0.1.0
 keyboard==0.13.5
+pygame==2.0.2
