@@ -3,11 +3,15 @@ from PIL import ImageTk
 from PIL import Image
 import random
 from time import time
-import keyboard
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+flag = True
 
 NUMBER_OF_RESULTS = 14
-SPIN_BUTTON = "q"
-WHEEL_PATH = "images/EuroWheel.png"
+WHEEL_PATH = "images/hjolv2.png"
 
 
 class SimpleApp(object):
@@ -62,11 +66,14 @@ class SimpleApp(object):
             if time() - diff_time > 0.5:
                 diff -= 2
                 diff_time = time()
-
-            if keyboard.is_pressed(SPIN_BUTTON):
+            if GPIO.input(10) == GPIO.HIGH and flag == True:
                 angle = random.randint(0, 360)
                 diff = random.randint(20, 40)
                 diff_time = time()
+                flag = False
+
+            if GPIO.input(10) != GPIO.HIGH:
+                flag = True                
 
 
 root = tk.Tk()
